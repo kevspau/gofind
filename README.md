@@ -5,7 +5,7 @@ compiled between 1.17.1 Golang Compiler and Replit 1.14 Golang Compiler
 
 this is just a fork of my other account's repo, this is the only one that will be updated.
 
-#Usage
+# Usage
 
 This package manager can be used in the following ways:
 
