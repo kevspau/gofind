@@ -8,11 +8,17 @@ this is just a fork of my other account's repo, this is the only one that will b
 # Usage
 
 This package manager can be used in the following ways:
+
 On the command line,
+
 `gof [github repo url]`, `gof package init` (`gof help` for more info)
+
 This downloads the repo, unpacks it into a folder, and places the folder in the current working directory.
+
 Or with the api,
+
 N/A
+
 This will allow you to easily download github files through the gofind api
 _____________________________________________________________________________________________________________________
 # Why?
