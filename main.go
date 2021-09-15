@@ -1,7 +1,7 @@
 package main
 
 import (
-  "flag"
+  "fmt"
   "os"
   "io"
   "net/http"
@@ -9,29 +9,35 @@ import (
   "strings"
 )
 var client = http.Client{}
-func downloadFile(url string) {
-  g, err := client.Get(url)
+func downloadFile(url string) *error {
   sp := strings.Split(url, "/")
+  err := os.Mkdir(sp[len(sp) - 1], 1)
   if err != nil {
-    log.Fatal(err)
+    return &err
   }
-  err = os.Mkdir(sp[len(sp)], 0777)
-  if err != nil {
-    log.Fatal(err)
-  }
-  os.Chdir("./" + sp[len(sp)])
+  os.Chdir("./" + sp[len(sp) - 1])
+  var newg string
   if strings.HasPrefix(url, "github.com") || strings.HasPrefix(url, "https://github.com") {
-    g, err = client.Get(url + "/archives/reps/heads/master.zip")
+    newg = url + "/archives/reps/heads/master.zip"
   } else {
-    log.Fatal("Unsupported domain given. Current supported domains include...\n[https://]github.com")
+    log.Fatal("Unsupported domain given.")
   }
-  file, err := os.Create(sp[len(sp)])
+  file, err := os.Create(sp[len(sp) - 1] + ".zip")
   os.Chdir("../")
   if err != nil {
-    log.Fatal(err)
+    return &err
+  }
+  g, err := client.Get(newg)
+  if err != nil {
+    return &err
   }
   io.Copy(file, g.Body)
+  return nil
 }
 func main() {
-  downloadFile(flag.Args()[0])
+  fmt.Println("Attempting to download file...")
+   err := downloadFile(os.Args[1])
+   if err != nil {
+     log.Fatal("Failed to download file/folder:", err)
+   }
 }
