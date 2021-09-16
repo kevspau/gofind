@@ -11,7 +11,7 @@ This package manager can be used in the following ways:
 
 On the command line,
 
-`gof [github repo url]`, `gof package init` (`gof help` for more info)
+`gof [github repo url]` (`gof help` for more info)
 
 This downloads the repo, unpacks it into a folder, and places the folder in the current working directory.
 
