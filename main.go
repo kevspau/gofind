@@ -83,6 +83,6 @@ func main() {
 		}
 		fmt.Println("Successfully unzipped files, Exit Code 0")
 	} else if os.Args[1] == "help" {
-		fmt.Println("Commands:\n\nhelp - Lists current commands\nver - Lists current version of gofind with the version of golang compiler used\npackage")
+		fmt.Println("Commands:\n\nhelp - Lists current commands\nver - Lists current version of gofind with the version of golang compiler used\npackage") this s test eyes yesteysd
 	}
 }
