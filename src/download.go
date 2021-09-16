@@ -1,6 +1,15 @@
-package main
+package download
 
-import ( "strings" "fmt" "os" "net/http" "path/filepath" "log" "archive/zip" "io")
+import ( 
+	"strings"
+	"fmt"
+	"os"
+	"net/http"
+	"path/filepath"
+	"log"
+	"archive/zip"
+	"io"
+)
 
 var client = http.Client{}
 
