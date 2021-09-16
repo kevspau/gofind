@@ -54,17 +54,31 @@ func main() {
 	defer zip.Close()
 	for _, fi := range zip.File {
 		fmt.Printf("Unpacking %s..", fi.Name)
-		f, err := os.Create(fi.Name)
+		file, err := fi.Open()
 		if err != nil {
 			log.Fatal("Failed to unpack file/folder: ", err)
 		}
-		readerr, err := fi.Open()
-		if err != nil {
-			log.Fatal("Failed to unpack file/folder: ", err)
+		if !fi.FileHeader.FileInfo().IsDir() {
+			Foo, err := os.Create(filepath.Join(link[len(link)-1], fi.Name))
+			if err != nil {
+				log.Fatal("Failed to unpack file/folder: ", err)
+			}
+			readerr, err := fi.Open()
+			if err != nil {
+				log.Fatal("Failed to unpack file/folder: ", err)
+			}
+			io.Copy(Foo, readerr)
+			fmt.Printf("(Size %d) [Done]\n", fi.FileInfo().Size())
+			Foo.Close()
+		} else {
+			dir, f := filepath.Split(fi.Name)
+			os.MkdirAll(filepath.Join(link[len(link)-1], dir), 1)
+			os.Create(filepath.Join(filepath.Join(link[len(link)-1], dir), f))
+			fil, _ := os.Open(f)
+			io.Copy(fil, file)
+			fmt.Print(" [Done]\n")
+			fil.Close()
 		}
-		io.Copy(f, readerr)
-		fmt.Print(" [Done]\n")
 	}
 	fmt.Println("Successfully unzipped files, Exit Code 0")
-	os.Exit(0)
 }
