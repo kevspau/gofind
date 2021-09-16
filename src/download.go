@@ -1,4 +1,4 @@
-package download
+package main
 
 import ( "strings" "fmt" "os" "net/http" "path/filepath" "log" "archive/zip" "io")
 
