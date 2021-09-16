@@ -1,4 +1,4 @@
-package download
+package src
 
 import ( 
 	"strings"
@@ -13,7 +13,7 @@ import (
 
 var client = http.Client{}
 
-func downloadFile(url string) error {
+func DownloadFile(url string) error {
 	sp := strings.Split(url, "/")
 	url = os.Args[1]
 	var newg string
