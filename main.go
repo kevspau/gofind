@@ -25,7 +25,7 @@ func main() {
 		} else if os.Args[2] == "find" {
 			//above
 		} else if os.Args[2] == "search" {
-			//above and connect database(sql or mongodb)
+			//above and connect database(sql or mongodb) or make .find files automate builds
 		}
 	}
 }
