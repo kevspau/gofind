@@ -4,7 +4,7 @@ import (
 	"io"
 	"os"
 	"strings"
-	"github.com/csharpdf/gofind/src/src"
+	"github.com/csharpdf/gofind/src"
 	"fmt"
 )
 
