@@ -13,7 +13,7 @@ import (
 
 var client = http.Client{}
 
-func DownloadFile(url string) error {
+func downloadFile(url string) error {
 	sp := strings.Split(url, "/")
 	url = os.Args[1]
 	var newg string
@@ -40,7 +40,7 @@ func DownloadFile(url string) error {
 	}
 	return nil
 }
-func download(string url) {
+func Download(string url) {
 	fmt.Println("Attempting to download file...")
 	err := downloadFile(url)
 	if err != nil {
