@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io"
 	"os"
 	"strings"
 	"github.com/csharpdf/gofind/src"
@@ -18,7 +17,7 @@ func main() {
 	} else if os.Args[1] == "help" {
 		src.Help()
 	} else if os.Args[1] == "package" {
-		if os.Args[2] == nil {
+		if os.Args[2] == "" {
 			src.PackageHelp()
 		} else if os.Args[2] == "init" {
 			//make .find file parser first
