@@ -15,13 +15,8 @@ var client = http.Client{}
 
 func downloadFile(url string) error {
 	sp := strings.Split(url, "/")
-	url = os.Args[1]
 	var newg string
-	if strings.HasPrefix(url, "github.com") || strings.HasPrefix(url, "https://github.com") {
-		newg = url + "/archive/refs/heads/master.zip"
-	} else {
-		log.Fatal("Unsupported domain given.")
-	}
+	newg = url + "/archive/refs/heads/master.zip"
 	err := os.Mkdir(sp[len(sp)-1], 1)
 	if err != nil {
 		return err
@@ -41,13 +36,14 @@ func downloadFile(url string) error {
 	return nil
 }
 func Download(url string) {
+	inDir := false
 	fmt.Println("Attempting to download file...")
 	err := downloadFile(url)
 	if err != nil {
 		log.Fatal("Failed to download file/folder: ", err)
 	}
 	fmt.Println("Successfully downloaded repository zip file!")
-	link := strings.Split(os.Args[1], "/")
+	link := strings.Split(url, "/")
 	zip, err := zip.OpenReader(filepath.Join(link[len(link)-1], "/main.zip"))
 	if err != nil {
 		log.Fatal("Failed to unpack file/folder: ", err)
@@ -55,30 +51,35 @@ func Download(url string) {
 	defer zip.Close()
 	for _, fi := range zip.File {
 		fmt.Printf("Unpacking %s..", fi.Name)
-		file, err := fi.Open()
-		if err != nil {
-			log.Fatal("Failed to unpack file/folder: ", err)
-		}
 		if !fi.FileHeader.FileInfo().IsDir() {
-			Foo, err := os.Create(filepath.Join(link[len(link)-1], fi.Name))
-			if err != nil {
-				log.Fatal("Failed to unpack file/folder: ", err)
+			if !inDir {
+				file, err := fi.Open()
+				if err != nil {
+					log.Fatal("Failed to unpack file/folder: ", err)
+				}
+				Foo, err := os.Create(filepath.Join(link[len(link)-1], fi.Name))
+				if err != nil {
+					log.Fatal("Failed to unpack file/folder: ", err)
+				}
+				readerr, err := fi.Open()
+				if err != nil {
+					log.Fatal("Failed to unpack file/folder: ", err)
+				}
+				io.Copy(Foo, readerr)
+				fmt.Printf("(Size %d) [Done]\n", fi.FileInfo().Size())
+				Foo.Close()
+			} else {
+				os.Create(filepath.Join(filepath.Join(link[len(link)-1], dir), f))
+				fil, _ := os.Open(f)
+				io.Copy(fil, file)
+				fmt.Print(" [Done]\n")
+				fil.Close()
+				inDir = false
 			}
-			readerr, err := fi.Open()
-			if err != nil {
-				log.Fatal("Failed to unpack file/folder: ", err)
-			}
-			io.Copy(Foo, readerr)
-			fmt.Printf("(Size %d) [Done]\n", fi.FileInfo().Size())
-			Foo.Close()
 		} else {
-			dir, f := filepath.Split(fi.Name)
+			dir, _ := filepath.Split(fi.Name)
 			os.MkdirAll(filepath.Join(link[len(link)-1], dir), 1)
-			os.Create(filepath.Join(filepath.Join(link[len(link)-1], dir), f))
-			fil, _ := os.Open(f)
-			io.Copy(fil, file)
-			fmt.Print(" [Done]\n")
-			fil.Close()
+			inDir = true
 		}
 	}
 	fmt.Println("Successfully unzipped files, Exit Code 0")
