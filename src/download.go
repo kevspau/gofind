@@ -40,7 +40,7 @@ func downloadFile(url string) error {
 	}
 	return nil
 }
-func Download(string url) {
+func Download(url string) {
 	fmt.Println("Attempting to download file...")
 	err := downloadFile(url)
 	if err != nil {
