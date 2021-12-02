@@ -1,7 +1,5 @@
 # gofind
-a tiny little package manager i made for fun, W.I.P
-
-compiled between 1.17.1 Golang Compiler and Replit 1.14 Golang Compiler
+### a tiny little package manager i made for fun, W.I.P
 
 this is just a fork of [my other account's repo](https://github.com/sharpcdf/gofind), however this is the only one that will be updated.
 
@@ -24,3 +22,7 @@ ________________________________________________________________________________
 # Why?
 
 I was bored, and thought that it would be fun to implement http(s) requests with file manipulating. Yes, there are also winget, curl, and other url downloaders/package managers that provide compatibility with other websites, but gofind's goal is to provide a simplified way to download exclusively GitHub and other Git based websites' repositories, either for editing for pull requests, or for forking repos. Eventually, I plan to make an all-out package system where you can publish your own packages by using a custom file extension for organization.
+
+
+# This project is currently getting a rework.
+In order to optimize my code, I've decided to rework the project.
