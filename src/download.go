@@ -1,85 +1,81 @@
 package src
 
-import ( 
-	"strings"
-	"fmt"
-	"os"
-	"net/http"
-	"path/filepath"
-	"log"
+import (
 	"archive/zip"
+	"fmt"
 	"io"
+	"log"
+	"net/http"
+	"os"
+	"strings"
 )
 
 var client = http.Client{}
 
-func downloadFile(url string) error {
+func downloadFile_github(url string) (string, error) {
 	sp := strings.Split(url, "/")
-	var newg string
-	newg = url + "/archive/refs/heads/master.zip"
-	err := os.Mkdir(sp[len(sp)-1], 1)
-	if err != nil {
-		return err
+	primeBranch := false
+	for _, v := range sp {
+		if v == "tree" {
+			primeBranch = true
+		}
 	}
-	file, err := os.Create(filepath.Join(sp[len(sp)-1], "main.zip"))
-	if err != nil {
-		return err
+	if primeBranch {
+		req, e := http.Get(url + "/archive/refs/heads/master.zip")
+		if e != nil {
+			fmt.Println("Error retrieving content")
+			return "", e
+		}
+		file, e := os.Create(sp[len(sp)-1])
+		if e != nil {
+			fmt.Println("Error creating file")
+			return "", e
+		}
+		io.Copy(file, req.Body)
+		return sp[len(sp)-1], nil
+	} else if !primeBranch {
+		x := strings.Replace(url, "/tree", "", -1)
+		x = strings.Replace(x, "/"+sp[len(sp)-1], "", -1)
+		req, e := http.Get(x + "/archive/refs/heads/" + sp[len(sp)-1] + ".zip")
+		if e != nil {
+			fmt.Println("Error retrieving content")
+			return "", e
+		}
+		file, e := os.Create(sp[len(sp)-1])
+		if e != nil {
+			fmt.Println("Error creating file")
+			return "", e
+		}
+		io.Copy(file, req.Body)
+		return sp[len(sp)-1], nil
 	}
-	g, err := client.Get(newg)
-	if err != nil {
-		return err
-	}
-	_, err = io.Copy(file, g.Body)
-	if err != nil {
-		return err
-	}
-	return nil
+	return "", nil
 }
 func Download(url string) {
-	inDir := false
 	fmt.Println("Attempting to download file...")
-	err := downloadFile(url)
-	if err != nil {
-		log.Fatal("Failed to download file/folder: ", err)
+	name, e := downloadFile_github(url)
+	if e != nil {
+		log.Fatal("Failed to download file/folder: ", e)
 	}
 	fmt.Println("Successfully downloaded repository zip file!")
-	link := strings.Split(url, "/")
-	zip, err := zip.OpenReader(filepath.Join(link[len(link)-1], "/main.zip"))
-	if err != nil {
-		log.Fatal("Failed to unpack file/folder: ", err)
+	dir, e := os.Getwd()
+	if e != nil {
+		log.Fatal("Failed to find file/folder: ", e)
+	}
+	dir = dir + "/" + name
+	zip, e := zip.OpenReader(dir)
+	if e != nil {
+		log.Fatal("Failed to unpack file/folder: ", e)
 	}
 	defer zip.Close()
-	for _, fi := range zip.File {
-		fmt.Printf("Unpacking %s..", fi.Name)
-		if !fi.FileHeader.FileInfo().IsDir() {
-			if !inDir {
-				file, err := fi.Open()
-				if err != nil {
-					log.Fatal("Failed to unpack file/folder: ", err)
-				}
-				Foo, err := os.Create(filepath.Join(link[len(link)-1], fi.Name))
-				if err != nil {
-					log.Fatal("Failed to unpack file/folder: ", err)
-				}
-				readerr, err := fi.Open()
-				if err != nil {
-					log.Fatal("Failed to unpack file/folder: ", err)
-				}
-				io.Copy(Foo, readerr)
-				fmt.Printf("(Size %d) [Done]\n", fi.FileInfo().Size())
-				Foo.Close()
-			} else {
-				os.Create(filepath.Join(filepath.Join(link[len(link)-1], dir), f))
-				fil, _ := os.Open(f)
-				io.Copy(fil, file)
-				fmt.Print(" [Done]\n")
-				fil.Close()
-				inDir = false
-			}
-		} else {
-			dir, _ := filepath.Split(fi.Name)
-			os.MkdirAll(filepath.Join(link[len(link)-1], dir), 1)
-			inDir = true
+	//arch, e := zip.Open(dir)
+	//if e != nil {
+	//	log.Fatal("Failed to unpack file/folder: ", e)
+	//}
+	for _, f := range zip.File {
+		file, e := f.Open()
+		if e != nil {
+			log.Fatal("Failed to unpack file/folder: ", e)
 		}
 	}
 	fmt.Println("Successfully unzipped files, Exit Code 0")
