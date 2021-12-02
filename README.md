@@ -25,4 +25,4 @@ I was bored, and thought that it would be fun to implement http(s) requests with
 
 
 # This project is currently getting a rework.
-In order to optimize my code, I've decided to rework the project.
+In order to optimize my code, I've decided to rework the project. Check out the current progress [here](https://github.com/csharpdf/gofind/tree/rewrite).
