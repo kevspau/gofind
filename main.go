@@ -10,7 +10,8 @@ import (
 func main() {
 	if os.Args[1] == "find" {
 		if strings.HasPrefix(os.Args[2], "github.com") || strings.HasPrefix(os.Args[2], "https://github.com") {
-			src.Download(os.Args[2])
+			url := strings.TrimPrefix(os.Args[2], "https://")
+			src.Download(url)
 		} else {
 			fmt.Println("Unsupported domain given. Current supported domains are...\n\n [https://]github.com")
 		}
