@@ -77,6 +77,19 @@ func Download(url string) {
 		if e != nil {
 			log.Fatal("Failed to unpack file/folder: ", e)
 		}
+		if !(f.FileInfo().IsDir()) {
+			nfile, e := os.Create(f.FileInfo().Name())
+			if e != nil {
+				log.Fatal("Failed to copy file/folder: ", e)
+			}
+			io.Copy(nfile, file)
+		} else {
+			e := os.MkdirAll(f.FileInfo().Name(), f.FileInfo().Mode())
+			if e != nil {
+				log.Fatal("Failed to copy file/folder: ", e)
+			}
+			io.Copy(, f)
+		}
 	}
 	fmt.Println("Successfully unzipped files, Exit Code 0")
 }
