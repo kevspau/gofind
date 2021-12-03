@@ -62,8 +62,6 @@ func Download(url string) {
 	if e != nil {
 		log.Fatal("Failed to download file/folder1: ", e)
 	}
-	fmt.Println("Successfully downloaded repository zip file!")
-	fmt.Print("aaaaaaaaaa\n" + filepath.Join(root, name) + "\n\na\n")
 	zip, e := zip.OpenReader(filepath.Join(root, name))
 	if e != nil {
 		log.Fatal("Failed to unpack file/folder2: ", e)
