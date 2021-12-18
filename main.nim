@@ -36,7 +36,7 @@ if findExe("git") != "":
                     stdout.styledWriteLine(fgRed, "Error: ", resetStyle, "Failed to download repository, either unsupported git website, or repository does not exist.")
             if os.paramCount() > 2 and (os.paramStr(3) == "-D" or os.paramStr(4) == "-D"):
                 setCurrentDir(getAppDir() & DirSep & paramStr(2).split("/")[1])
-                removeDir(".git")
+                removeDir(".git") #TODO: Remove other git-related files like .gitignore if found
         elif os.paramStr(1) == "-h":
             echo "gofind - A small, simple wrapper around git clone.\n\nUsage: gof find [git url] [options]\n\n-h            Display this help text\n-b=<branch name>            Clone a specific branch of a repository\n-D            Delete .git folder after clone\n\n\n" #help text
         else:
