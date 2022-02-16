@@ -1,4 +1,5 @@
 # gofind
+# This project has been archived in favor of a new package/dependency manager that I'm currently working on.
 ### a tiny little package manager i made for fun, W.I.P
 
 this is just a fork of [my other account's repo](https://github.com/sharpcdf/gofind), however this is the only one that will be updated.
