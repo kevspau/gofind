@@ -5,4 +5,4 @@ tasks:
       xz -d nim.tar.xz
       tar -xf nim.tar
       rm nim.tar
-      export PATH=/home/gitpod/.nimble/bin:$PATH
+      export PATH=$PATH:/workspace/gofind/nim-1.6.2/bin
