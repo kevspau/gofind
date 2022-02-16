@@ -1,3 +1,8 @@
 tasks:
-  - init: go get && go build ./... && go test ./...
-    command: go run
+  - init: |
+      curl -L https://nim-lang.org/download/nim-1.6.2-linux_x64.tar.xz -o nim.tar.xz
+    command: |
+      xz -d nim.tar.xz
+      tar -xf nim.tar
+      rm nim.tar
+      export PATH=/home/gitpod/.nimble/bin:$PATH
